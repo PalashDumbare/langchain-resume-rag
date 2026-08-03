@@ -34,3 +34,5 @@ htmlcov/
 *.db
 chroma/
 *.faiss
+resume_db/
+chroma_db/
