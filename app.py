@@ -1,9 +1,8 @@
-from numpy import rint
-
 from src.loader import load_documents
 from src.splitter import split_documents
 from src.embeddings import get_embedding_model
-from src.vectordb import create_vector_database
+from src.vectordb import get_vector_database
+from src.retriever import get_retriever
 
 
 def main():
@@ -12,12 +11,20 @@ def main():
     chunks = split_documents(documents)
     print(f"Loaded {len(documents)} pages.")
     print(f"Created {len(chunks)} chunks.")
-    embedding_model = get_embedding_model()
-    vector = embedding_model.embed_query(chunks[0].page_content)
-    print(f"Embedding dimensions: {len(vector)}")
-    print(vector[:10])
-    vector_db = create_vector_database(chunks)
+
+    vector_db = get_vector_database(chunks)
     print("Vector database created successfully.")
+
+    query = "List all skills of Palash?"
+    retriever = get_retriever(vector_db)
+    results = retriever.invoke(query)
+    print(f"Found {len(results)} relevant documents for the query: '{query}'")
+    for i, doc in enumerate(results, start=1):
+        print("=" * 80)
+        print(f"Result {i}")
+        print(doc.metadata)
+        print("-" * 80)
+        print(doc.page_content)
 
 
 if __name__ == "__main__":
