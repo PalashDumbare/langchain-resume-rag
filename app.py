@@ -4,10 +4,10 @@ from src.splitter import split_documents
 from src.vectordb import get_vector_database
 from src.retriever import get_retriever
 from src.chain import get_rag_chain
+from config import DATA_DIR
 
 def main():
-    data_dir = "data"
-    documents = load_documents(data_dir)
+    documents = load_documents(DATA_DIR)
     chunks = split_documents(documents)
     print(f"Loaded {len(documents)} pages.")
     print(f"Created {len(chunks)} chunks.")
@@ -15,13 +15,23 @@ def main():
     vector_db = get_vector_database(chunks)
     print("Vector database is ready.")
 
-    chain = get_rag_chain(get_retriever(vector_db))
+    retriever = get_retriever(vector_db)
+    chain = get_rag_chain(retriever)
 
-    query = "List all skills of Palash?"
-    response = chain.invoke(query)
+    while True:
+        query = input("\nAsk a question (type 'exit' to quit): ").strip()
 
-    print("\nAnswer\n")
-    print(response)
+        if query.lower() in {"exit", "quit"}:
+            print("Goodbye!")
+            break
+
+        if not query:
+            continue
+
+        response = chain.invoke(query)
+
+        print("\nAnswer:")
+        print(response)
 
 
 if __name__ == "__main__":
