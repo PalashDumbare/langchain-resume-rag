@@ -7,3 +7,4 @@ pypdf
 ollama
 langchain-chroma
 langchain-core
+langchain-ollama
