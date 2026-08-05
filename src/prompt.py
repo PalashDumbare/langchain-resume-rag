@@ -1,19 +1,22 @@
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 
 def get_prompt():
-    return ChatPromptTemplate.from_template(
-          """
-You are a helpful AI assistant.
+    return ChatPromptTemplate.from_messages(
+        [
+             (
+                "system",
+                """
+                You are a helpful AI assistant.
 
-Answer the question only using the provided context.
+                Answer the user's question using only the provided context.
 
-If the answer is not present in the context, say:
-"I couldn't find that information."
+                If the answer isn't available, say you don't know.
 
-Context:
-{context}
-
-Question:
-{question}
-"""
+                Context:
+                {context}
+                """,
+            ),
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("human", "{question}"),
+        ]
     )

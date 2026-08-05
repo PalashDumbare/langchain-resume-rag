@@ -28,7 +28,15 @@ def main():
         if not query:
             continue
 
-        response = chain.invoke(query)
+        response = chain.invoke(
+            {"question": query},
+            config={
+                # Only 1 conversation session is supported.
+                "configurable": {
+                    "session_id": "default_session"
+                }
+            },
+        )
 
         print("\nAnswer:")
         print(response)
