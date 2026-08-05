@@ -28,18 +28,18 @@ def main():
         if not query:
             continue
 
-        response = chain.invoke(
+
+        for chunk in chain.stream(
             {"question": query},
             config={
-                # Only 1 conversation session is supported.
                 "configurable": {
                     "session_id": "default_session"
                 }
             },
-        )
+        ): print(chunk, end="", flush=True)
 
-        print("\nAnswer:")
-        print(response)
+        print()
+
 
 
 if __name__ == "__main__":

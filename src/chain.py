@@ -19,14 +19,12 @@ def _extract_question(values):
     return question or ""
 
 def _get_context(values, retriever):
-    print("Retrieving context for question:", values)
     question = _extract_question(values)
     return retriever.invoke(question)
 
 def get_rag_chain(retriever):
     model = ChatOllama(model=LLM_MODEL, temperature=0)
     prompt = get_prompt()
-
     chain = (
         RunnablePassthrough.assign(
             context=RunnableLambda(lambda values: _get_context(values, retriever)),
