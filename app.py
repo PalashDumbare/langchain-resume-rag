@@ -33,7 +33,7 @@ def main():
             {"question": query},
             config={
                 "configurable": {
-                    "session_id": "default_session_id",
+                    "session_id": "default_session",
                 }
             },
         ): print(chunk, end="", flush=True)
