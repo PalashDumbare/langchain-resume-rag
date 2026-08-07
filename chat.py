@@ -1,19 +1,11 @@
 
-from src.loader import load_documents
-from src.splitter import split_documents
-from src.vectordb import get_vector_database
+from src.vectordb import load_vector_database
 from src.retriever import get_retriever
 from src.chain import get_rag_chain
-from config import DATA_DIR
 
 def main():
-    documents = load_documents(DATA_DIR)
-    chunks = split_documents(documents)
-    print(f"Loaded {len(documents)} pages.")
-    print(f"Created {len(chunks)} chunks.")
-
-    vector_db = get_vector_database(chunks)
-    print("Vector database is ready.")
+    vector_db = load_vector_database()
+    print("Vector database loaded.")
 
     retriever = get_retriever(vector_db)
     chain = get_rag_chain(retriever)
@@ -28,7 +20,6 @@ def main():
         if not query:
             continue
 
-
         for chunk in chain.stream(
             {"question": query},
             config={
@@ -39,7 +30,6 @@ def main():
         ): print(chunk, end="", flush=True)
 
         print()
-
 
 
 if __name__ == "__main__":
